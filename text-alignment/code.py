@@ -1,122 +1,124 @@
 """Module containing LETTER alignment examples best for the letter H."""
 
-LETTER = "H"
 
+class Graphic:
 
-def top_cone(thickness):
-    """Function that builds the top cone."""
+    LETTER = "H"
 
-    substring_length = thickness - 1
+    def __init__(self, thickness):
+        self.thickness = thickness
 
-    layers = []
-    for index in range(thickness):
-        substring = LETTER * index
-        prefix = substring.rjust(substring_length)
-        suffix = substring.ljust(substring_length)
+        self.pillar_height = thickness + 1
+        self.pillar_length = thickness * 2
+        self.total_length = thickness * 6
+        self.string = self.LETTER * thickness
 
-        layer = prefix + LETTER + suffix
-        layers.append(layer)
+        self.parts = (
+            self.top_cone(),
+            self.top_pillars(),
+            self.middle_belt(),
+            self.bottom_pillars(),
+            self.bottom_cone()
+        )
 
-    body = "\n".join(layers)
+    def __str__(self):
+        return "\n".join(self)
 
-    return body
+    def __len__(self):
+        return len(self.parts)
 
+    def __iter__(self):
+        for part in self.parts:
+            yield part
 
-def top_pillars(string, width, height, total_width):
-    """Function that builds the top pillars."""
+    def top_cone(self):
+        """Function that builds the top cone."""
 
-    layers = []
-    for _ in range(height):
-        left = string.center(width)
-        right = string.center(total_width)
+        substring_length = self.thickness - 1
 
-        layer = left + right
-        layers.append(layer)
+        layers = []
+        for index in range(self.thickness):
+            substring = self.LETTER * index
+            prefix = substring.rjust(substring_length)
+            suffix = substring.ljust(substring_length)
 
-    body = "\n".join(layers)
+            layer = prefix + self.LETTER + suffix
+            layers.append(layer)
 
-    return body
+        body = "\n".join(layers)
 
+        return body
 
-def middle_belt(string, height, total_width):
-    """Function that builds the middle belt."""
+    def top_pillars(self):
+        """Function that builds the top pillars."""
 
-    layers = []
-    for _ in range(height // 2):
-        string_width = string * 5
+        layers = []
+        for _ in range(self.pillar_height):
+            left = self.string.center(self.pillar_length)
+            right = self.string.center(self.total_length)
 
-        layer = string_width.center(total_width)
-        layers.append(layer)
+            layer = left + right
+            layers.append(layer)
 
-    body = "\n".join(layers)
+        body = "\n".join(layers)
 
-    return body
+        return body
 
+    def middle_belt(self):
+        """Function that builds the middle belt."""
 
-def bottom_pillars(string, width, height, total_width):
-    """Function that builds the bottom pillars."""
+        layers = []
+        for _ in range(self.pillar_height // 2):
+            string_width = self.string * 5
 
-    layers = []
-    for _ in range(height):
-        left = string.center(width)
-        right = string.center(total_width)
+            layer = string_width.center(self.total_length)
+            layers.append(layer)
 
-        layer = left + right
-        layers.append(layer)
+        body = "\n".join(layers)
 
-    body = "\n".join(layers)
+        return body
 
-    return body
+    def bottom_pillars(self):
+        """Function that builds the bottom pillars."""
 
+        layers = []
+        for _ in range(self.pillar_height):
+            left = self.string.center(self.pillar_length)
+            right = self.string.center(self.total_length)
 
-def bottom_cone(thickness, total_length):
-    """Build the bottom cone."""
+            layer = left + right
+            layers.append(layer)
 
-    layers = []
-    for index in range(thickness):
-        length = thickness - index - 1
-        substring = LETTER * length
+        body = "\n".join(layers)
 
-        prefix = substring.rjust(thickness)
-        suffix = substring.ljust(thickness)
-        string = prefix + LETTER + suffix
+        return body
 
-        layer = string.rjust(total_length)
-        layers.append(layer)
+    def bottom_cone(self):
+        """Build the bottom cone."""
 
-    body = "\n".join(layers)
+        layers = []
+        for index in range(self.thickness):
+            length = self.thickness - index - 1
+            substring = self.LETTER * length
 
-    return body
+            prefix = substring.rjust(self.thickness)
+            suffix = substring.ljust(self.thickness)
+            string = prefix + self.LETTER + suffix
 
+            layer = string.rjust(self.total_length)
+            layers.append(layer)
 
-def build(thickness):
-    """Draw the letter."""
+        body = "\n".join(layers)
 
-    pillar_height = thickness + 1
-    pillar_length = thickness * 2
-    total_length = thickness * 6
-    string = LETTER * thickness
-
-    body = "\n".join([
-        top_cone(thickness),
-        top_pillars(string, pillar_length, pillar_height, total_length),
-        middle_belt(string, pillar_height, total_length),
-        bottom_pillars(string, pillar_length, pillar_height, total_length),
-        bottom_cone(thickness, total_length)
-    ])
-
-    return body
+        return body
 
 
 def main():
     """Run the main function."""
 
     thickness = int(input())
-
-
-    result = build(thickness)
-
-    print(result)
+    graphic = Graphic(thickness)
+    print(graphic)
 
 
 if __name__ == "__main__":
